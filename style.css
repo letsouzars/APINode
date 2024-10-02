@@ -54,7 +54,14 @@ button:hover {
 }
 
 p {
-  padding: 10px;
-  background-color: #f0f0f0;
-  border-radius: 4px;
+  padding: 15px; /* Aumenta o padding para mais espaço interno */
+  background-color: #f0f0f0; /* Cor de fundo do resultado */
+  border-radius: 4px; /* Cantos arredondados */
+  border: 1px solid #ccc; /* Adiciona uma borda sutil */
+  overflow-wrap: break-word; /* Quebra de linha se o texto for muito longo */
+  white-space: pre-wrap; /* Mantém os espaços em branco */
+  word-wrap: break-word; /* Quebra palavras longas */
+  font-family: monospace; /* Usa uma fonte monoespaçada para melhor legibilidade */
+  max-height: 200px; /* Limita a altura do quadrado */
+  overflow: auto; /* Adiciona rolagem se o conteúdo for muito longo */
 }

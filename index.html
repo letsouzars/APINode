@@ -32,7 +32,7 @@
     // Criptografar mensagem
     document.getElementById('encrypt-btn').addEventListener('click', () => {
       const message = document.getElementById('message').value;
-      fetch('https://your-replit-url/encrypt', { // Substitua 'your-replit-url' pela URL do seu Replit
+      fetch('https://b5f3a3f1-b555-4324-b762-542e55818200-00-2nstc82py857q.picard.replit.dev/encrypt', { // URL do Replit para criptografar
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +52,7 @@
     // Descriptografar mensagem
     document.getElementById('decrypt-btn').addEventListener('click', () => {
       const encryptedMessage = JSON.parse(document.getElementById('result').textContent);
-      fetch('https://your-replit-url/decrypt', { // Substitua 'your-replit-url' pela URL do seu Replit
+      fetch('https://b5f3a3f1-b555-4324-b762-542e55818200-00-2nstc82py857q.picard.replit.dev/decrypt', { // URL do Replit para descriptografar
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
