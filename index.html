@@ -48,8 +48,8 @@
       .then(response => response.json())
       .then(data => {
         console.log(data); // Verifique a estrutura do objeto retornado
-        if (data && typeof data.encryptedMessage === 'string') {
-          displayResult(data.encryptedMessage);
+        if (data && data.encryptedMessage) {
+          displayResult(JSON.stringify(data.encryptedMessage)); // Mostra o objeto completo
         } else {
           displayResult('Mensagem criptografada não encontrada.');
         }
@@ -61,7 +61,7 @@
 
     // Descriptografar mensagem
     document.getElementById('decrypt-btn').addEventListener('click', () => {
-      const encryptedMessage = document.getElementById('result').textContent; // Obtém a mensagem criptografada
+      const encryptedMessage = JSON.parse(document.getElementById('result').textContent); // Obtém a mensagem criptografada como um objeto
       if (!encryptedMessage || encryptedMessage === 'Mensagem criptografada não encontrada.') {
         displayResult('Nenhuma mensagem para descriptografar.');
         return;
@@ -73,11 +73,11 @@
           'Content-Type': 'application/json',
           'x-api-key': apiKey,
         },
-        body: JSON.stringify({ encryptedMessage }) 
+        body: JSON.stringify(encryptedMessage) // Envia o objeto completo
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data); // Verifique a estrutura do objeto retornado
+        console.log(data);
         if (data && typeof data.decryptedMessage === 'string') {
           displayResult(data.decryptedMessage);
         } else {

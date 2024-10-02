@@ -77,11 +77,12 @@ app.post('/encrypt', (req, res) => {
 // Endpoint para descriptografar uma mensagem
 app.post('/decrypt', (req, res) => {
   try {
-    const { encryptedMessage } = req.body;
-    if (!encryptedMessage) {
-      return res.status(400).json({ message: 'Mensagem criptografada não fornecida.' });
+    const { iv, content, secretKey } = req.body; // Desestruturar o objeto
+    if (!iv || !content || !secretKey) {
+      return res.status(400).json({ message: 'Mensagem criptografada não fornecida corretamente.' });
     }
-    const decryptedMessage = decryptMessage(encryptedMessage);
+    
+    const decryptedMessage = decryptMessage({ iv, content, secretKey });
     res.status(200).json({ decryptedMessage });
   } catch (error) {
     res.status(500).json({ message: 'Erro ao descriptografar mensagem.' });
