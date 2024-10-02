@@ -4,8 +4,8 @@ const crypto = require('crypto'); // Módulo para criptografia
 const app = express();
 const port = 3000;
 
-// Configuração da nova chave de API
-const API_KEY = '1928374756alskdjdjf'; // Nova chave de API
+// Configuração da chave de API
+const API_KEY = '1928374756alskdjdjf'; // Chave de API
 
 // Middleware para permitir o parsing de JSON nas requisições
 app.use(express.json());

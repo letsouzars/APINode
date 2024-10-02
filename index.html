@@ -27,44 +27,49 @@
   </div>
 
   <script>
-    const apiKey = '1928374756alskdjdjf'; // A nova chave que o middleware espera
-    
-    // Adicione aqui a lógica para criptografar e descriptografar as mensagens
+    const apiKey = '1928374756alskdjdjf'; // A chave que o middleware espera
+
+    // Criptografar mensagem
     document.getElementById('encrypt-btn').addEventListener('click', () => {
       const message = document.getElementById('message').value;
-      fetch('https://b5f3a3f1-b555-4324-b762-542e55818200-00-2nstc82py857q.picard.replit.dev/api/items', {
+      fetch('https://your-replit-url/encrypt', { // Substitua 'your-replit-url' pela URL do seu Replit
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': apiKey,
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ message })
       })
       .then(response => response.json())
       .then(data => {
-        document.getElementById('result').innerText = JSON.stringify(data);
+        document.getElementById('result').textContent = JSON.stringify(data.encryptedMessage);
       })
-      .catch(error => alert('Erro: ' + error));
+      .catch(error => {
+        document.getElementById('result').textContent = 'Erro: ' + error.message;
+      });
     });
 
+    // Descriptografar mensagem
     document.getElementById('decrypt-btn').addEventListener('click', () => {
-      const encryptedMessage = document.getElementById('message').value; // Use a mesma área de texto para a entrada
-      fetch('https://b5f3a3f1-b555-4324-b762-542e55818200-00-2nstc82py857q.picard.replit.dev/', {
+      const encryptedMessage = JSON.parse(document.getElementById('result').textContent);
+      fetch('https://your-replit-url/decrypt', { // Substitua 'your-replit-url' pela URL do seu Replit
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': apiKey,
         },
-        body: JSON.stringify({ encryptedMessage }),
+        body: JSON.stringify({ encryptedMessage })
       })
       .then(response => response.json())
       .then(data => {
-        document.getElementById('result').innerText = JSON.stringify(data);
+        document.getElementById('result').textContent = data.decryptedMessage;
       })
-      .catch(error => alert('Erro: ' + error));
+      .catch(error => {
+        document.getElementById('result').textContent = 'Erro: ' + error.message;
+      });
     });
   </script>
-
+  
 </body>
 
 </html>
