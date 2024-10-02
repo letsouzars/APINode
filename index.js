@@ -68,7 +68,11 @@ app.post('/encrypt', (req, res) => {
       return res.status(400).json({ message: 'Mensagem não fornecida.' });
     }
     const encryptedMessage = encryptMessage(message);
-    res.status(200).json(encryptedMessage); // Retorna o objeto completo
+    res.status(200).json({
+      iv: encryptedMessage.iv,
+      content: encryptedMessage.content,
+      secretKey: encryptedMessage.secretKey
+    }); // Retorna o objeto completo
   } catch (error) {
     res.status(500).json({ message: 'Erro ao criptografar mensagem.' });
   }
