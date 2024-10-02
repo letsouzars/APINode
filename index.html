@@ -27,40 +27,44 @@
   </div>
 
   <script>
-    const apiKey = '1234567890abcdef';
-
+    const apiKey = '1928374756alskdjdjf'; // A nova chave que o middleware espera
+    
+    // Adicione aqui a lógica para criptografar e descriptografar as mensagens
     document.getElementById('encrypt-btn').addEventListener('click', () => {
       const message = document.getElementById('message').value;
-      fetchMessage('encrypt', { message });
+      fetch('https://b5f3a3f1-b555-4324-b762-542e55818200-00-2nstc82py857q.picard.replit.dev/api/items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+        },
+        body: JSON.stringify({ message }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('result').innerText = JSON.stringify(data);
+      })
+      .catch(error => alert('Erro: ' + error));
     });
 
     document.getElementById('decrypt-btn').addEventListener('click', () => {
-      const encryptedMessage = document.getElementById('message').value;
-      fetchMessage('decrypt', { encryptedMessage });
-    });
-
-    function fetchMessage(endpoint, bodyData) {
-      fetch(`http://localhost:3000/${endpoint}`, {
+      const encryptedMessage = document.getElementById('message').value; // Use a mesma área de texto para a entrada
+      fetch('https://<link-do-replit>/decrypt', {
         method: 'POST',
         headers: {
-          'x-api-key': apiKey,
           'Content-Type': 'application/json',
+          'x-api-key': apiKey,
         },
-        body: JSON.stringify(bodyData)
+        body: JSON.stringify({ encryptedMessage }),
       })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erro ao processar a requisição: ' + response.status);
-          }
-          return response.json();
-        })
-        .then(data => {
-          const resultElement = document.getElementById('result');
-          resultElement.textContent = endpoint === 'encrypt' ? `Mensagem Criptografada: ${data.encryptedMessage}` : `Mensagem Descriptografada: ${data.decryptedMessage}`;
-        })
-        .catch(error => alert(error.message));
-    }
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('result').innerText = JSON.stringify(data);
+      })
+      .catch(error => alert('Erro: ' + error));
+    });
   </script>
+
 </body>
 
 </html>
