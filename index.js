@@ -48,11 +48,11 @@ const encryptMessage = (message) => {
 };
 
 // Função para descriptografar mensagens
-const decryptMessage = (hash) => {
+const decryptMessage = (encryptedMessage) => {
   const algorithm = 'aes-256-ctr';
-  const secretKey = Buffer.from(hash.secretKey, 'hex');
-  const iv = Buffer.from(hash.iv, 'hex');
-  const encryptedText = Buffer.from(hash.content, 'hex');
+  const secretKey = Buffer.from(encryptedMessage.secretKey, 'hex');
+  const iv = Buffer.from(encryptedMessage.iv, 'hex');
+  const encryptedText = Buffer.from(encryptedMessage.content, 'hex');
 
   const decipher = crypto.createDecipheriv(algorithm, secretKey, iv);
   const decrypted = Buffer.concat([decipher.update(encryptedText), decipher.final()]);
@@ -68,7 +68,7 @@ app.post('/encrypt', (req, res) => {
       return res.status(400).json({ message: 'Mensagem não fornecida.' });
     }
     const encryptedMessage = encryptMessage(message);
-    res.status(200).json({ encryptedMessage });
+    res.status(200).json(encryptedMessage); // Retorna o objeto completo
   } catch (error) {
     res.status(500).json({ message: 'Erro ao criptografar mensagem.' });
   }
@@ -81,8 +81,16 @@ app.post('/decrypt', (req, res) => {
     if (!iv || !content || !secretKey) {
       return res.status(400).json({ message: 'Mensagem criptografada não fornecida corretamente.' });
     }
-    
-    const decryptedMessage = decryptMessage({ iv, content, secretKey });
+
+    // Cria um objeto para passar para a função de descriptografia
+    const encryptedMessage = {
+      iv,
+      content,
+      secretKey,
+    };
+
+    // Passa o objeto completo para a função de descriptografia
+    const decryptedMessage = decryptMessage(encryptedMessage);
     res.status(200).json({ decryptedMessage });
   } catch (error) {
     res.status(500).json({ message: 'Erro ao descriptografar mensagem.' });
