@@ -29,10 +29,15 @@
   <script>
     const apiKey = '1928374756alskdjdjf'; // A chave que o middleware espera
 
+    // Função para exibir resultado
+    function displayResult(message) {
+      document.getElementById('result').textContent = message || 'Mensagem não encontrada.';
+    }
+
     // Criptografar mensagem
     document.getElementById('encrypt-btn').addEventListener('click', () => {
       const message = document.getElementById('message').value;
-      fetch('https://b5f3a3f1-b555-4324-b762-542e55818200-00-2nstc82py857q.picard.replit.dev/encrypt', {
+      fetch('http://localhost:3000/encrypt', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,30 +47,45 @@
       })
       .then(response => response.json())
       .then(data => {
-        document.getElementById('result').textContent = data.encryptedMessage || 'Mensagem criptografada não encontrada.';
+        console.log(data); // Verifique a estrutura do objeto retornado
+        if (data && typeof data.encryptedMessage === 'string') {
+          displayResult(data.encryptedMessage);
+        } else {
+          displayResult('Mensagem criptografada não encontrada.');
+        }
       })
       .catch(error => {
-        document.getElementById('result').textContent = 'Erro: ' + error.message;
+        displayResult('Erro: ' + error.message);
       });
     });
 
     // Descriptografar mensagem
     document.getElementById('decrypt-btn').addEventListener('click', () => {
-      const encryptedMessage = document.getElementById('result').textContent;
-      fetch('https://b5f3a3f1-b555-4324-b762-542e55818200-00-2nstc82py857q.picard.replit.dev/decrypt', {
+      const encryptedMessage = document.getElementById('result').textContent; // Obtém a mensagem criptografada
+      if (!encryptedMessage || encryptedMessage === 'Mensagem criptografada não encontrada.') {
+        displayResult('Nenhuma mensagem para descriptografar.');
+        return;
+      }
+
+      fetch('http://localhost:3000/decrypt', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': apiKey,
         },
-        body: JSON.stringify({ encryptedMessage })
+        body: JSON.stringify({ encryptedMessage }) 
       })
       .then(response => response.json())
       .then(data => {
-        document.getElementById('result').textContent = data.decryptedMessage || 'Mensagem descriptografada não encontrada.';
+        console.log(data); // Verifique a estrutura do objeto retornado
+        if (data && typeof data.decryptedMessage === 'string') {
+          displayResult(data.decryptedMessage);
+        } else {
+          displayResult('Mensagem descriptografada não encontrada.');
+        }
       })
       .catch(error => {
-        document.getElementById('result').textContent = 'Erro: ' + error.message;
+        displayResult('Erro: ' + error.message);
       });
     });
   </script>
