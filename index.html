@@ -4,49 +4,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consumir API em Node.js</title>
+  <title>API de Criptografia</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <div class="container">
-    <h1>Itens da API</h1>
+    <h1>Criptografia de Mensagens</h1>
 
-    <button id="fetch-items">Buscar Itens</button>
+    <div class="input-section">
+      <label for="message">Mensagem:</label>
+      <textarea id="message" rows="4"></textarea>
+    </div>
 
-    <div class="items-section">
-      <h2>Itens:</h2>
-      <ul id="items-list"></ul>
+    <button id="encrypt-btn">Criptografar Mensagem</button>
+    <button id="decrypt-btn">Descriptografar Mensagem</button>
+
+    <div class="result-section">
+      <h2>Resultado:</h2>
+      <p id="result"></p>
     </div>
   </div>
+
   <script>
     const apiKey = '1234567890abcdef';
 
-    document.getElementById('fetch-items').addEventListener('click', () => {
-      fetchItems(apiKey);
+    document.getElementById('encrypt-btn').addEventListener('click', () => {
+      const message = document.getElementById('message').value;
+      fetchMessage('encrypt', { message });
     });
 
-    function fetchItems(apiKey) {
-      fetch('https://8562be0c-2c6e-4433-9ae2-961dd4349dfe-00-dqfvdslvdjhf.worf.replit.dev/api/items', {
-        method: 'GET',
+    document.getElementById('decrypt-btn').addEventListener('click', () => {
+      const encryptedMessage = document.getElementById('message').value;
+      fetchMessage('decrypt', { encryptedMessage });
+    });
+
+    function fetchMessage(endpoint, bodyData) {
+      fetch(`http://localhost:3000/${endpoint}`, {
+        method: 'POST',
         headers: {
-          'x-api-key': apiKey
-        }
+          'x-api-key': apiKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodyData)
       })
         .then(response => {
           if (!response.ok) {
-            throw new Error('Erro ao buscar itens: ' + response.status);
+            throw new Error('Erro ao processar a requisição: ' + response.status);
           }
           return response.json();
         })
         .then(data => {
-          const itemsList = document.getElementById('items-list');
-          itemsList.innerHTML = ''; // Limpa a lista atual de itens
-          data.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item.nome;
-            itemsList.appendChild(li);
-          });
+          const resultElement = document.getElementById('result');
+          resultElement.textContent = endpoint === 'encrypt' ? `Mensagem Criptografada: ${data.encryptedMessage}` : `Mensagem Descriptografada: ${data.decryptedMessage}`;
         })
         .catch(error => alert(error.message));
     }
